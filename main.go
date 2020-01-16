@@ -8,6 +8,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"log"
 	"log/syslog"
+	"os"
 )
 
 type eventData struct {
@@ -24,8 +25,8 @@ type eventData struct {
 
 func main() {
 
+	key := os.Getenv("tktmst_apikey")
 	pc := "08028"
-	key := "jhoNr55QefAMxZknSaI4RmhtmcB6A6xz"
 
 	logwriter, e := syslog.New(syslog.LOG_NOTICE, "incident")
 	if e == nil {
