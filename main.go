@@ -9,6 +9,7 @@ import (
 	"log"
 	"log/syslog"
 	"os"
+	"time"
 )
 
 type eventData struct {
@@ -34,30 +35,32 @@ func main() {
 
 	}
 
-	q := events.GetEvents(pc, key)
+	for {
 
-	ed := eventData{}
+		q := events.GetEvents(pc, key)
 
-	ed.name = q.Embedded.Events[0].Name
-	ed.startDate = q.Embedded.Events[0].Dates.Start.LocalDate
-	ed.venueName = q.Embedded.Events[0].Embedded.Venues[0].Name
-	ed.venueAddress = q.Embedded.Events[0].Embedded.Venues[0].Address.Line1
-	ed.venueCity = q.Embedded.Events[0].Embedded.Venues[0].City.Name
-	ed.eventId = q.Embedded.Events[0].ID
-	ed.eventUrl = q.Embedded.Events[0].URL
-	ed.logoUrl = q.Embedded.Events[0].Embedded.Attractions[0].Images[0].URL
-	ed.venueId = q.Embedded.Events[0].ID
+		ed := eventData{}
 
-	d := insertData(config.DB, ed)
+		ed.name = q.Embedded.Events[0].Name
+		ed.startDate = q.Embedded.Events[0].Dates.Start.LocalDate
+		ed.venueName = q.Embedded.Events[0].Embedded.Venues[0].Name
+		ed.venueAddress = q.Embedded.Events[0].Embedded.Venues[0].Address.Line1
+		ed.venueCity = q.Embedded.Events[0].Embedded.Venues[0].City.Name
+		ed.eventId = q.Embedded.Events[0].ID
+		ed.eventUrl = q.Embedded.Events[0].URL
+		ed.logoUrl = q.Embedded.Events[0].Embedded.Attractions[0].Images[0].URL
+		ed.venueId = q.Embedded.Events[0].ID
 
-	fmt.Println(ed)
-	if d != nil {
-		fmt.Println(d)
+		d := insertData(config.DB, ed)
 
+		fmt.Println(ed)
+		if d != nil {
+			fmt.Println(d)
+
+		}
+
+		time.Sleep(120 * time.Second)
 	}
-
-	//time.Sleep(120 * time.Second)
-
 }
 
 func insertData(s *sql.DB, i eventData) error {
