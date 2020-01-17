@@ -69,7 +69,7 @@ func insertData(s *sql.DB, i eventData) error {
 
 	_, err := s.Exec("INSERT events(name, start_date, venue_name , venue_address, venue_city,event_id, event_url, logo_url, venue_id) VALUES(?,?,?,?,?,?,?,?,?)", i.name, i.startDate, i.venueName, i.venueAddress, i.venueCity, i.eventId, i.eventUrl, i.logoUrl, i.venueId)
 	log.Print("Successfully created DB record for incident info")
-
+	defer s.Close()
 	return err
 
 }
